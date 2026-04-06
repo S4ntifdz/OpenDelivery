@@ -1,0 +1,414 @@
+{
+    "info": {
+        "_postman_id": "12345678-abcd-efgh-ijkl-1234567890ab",
+        "name": "LogisticsCore API",
+        "description": "Colección completa para la API LogisticsCore. Soporta multi-tenancy (comercios) vía X-API-Key. Gestiona Shipments, Couriers, Tracking y Routing.",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Shipments",
+            "item": [
+                {
+                    "name": "Request Quote",
+                    "request": {
+                        "auth": {
+                            "type": "apikey",
+                            "apikey": [
+                                {
+                                    "key": "in",
+                                    "value": "header",
+                                    "type": "string"
+                                },
+                                {
+                                    "key": "key",
+                                    "value": "X-API-Key",
+                                    "type": "string"
+                                },
+                                {
+                                    "key": "value",
+                                    "value": "{{api_token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"provider\": \"TEST\",\n  \"origin_location\": {\n    \"address\": \"Panama 925\",\n    \"city\": \"CABA\"\n  },\n  \"destination_location\": {\n    \"address\": \"Jose Bonifacio 3741\",\n    \"city\": \"CABA\"\n  }\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/shipments/quotes",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "shipments",
+                                "quotes"
+                            ]
+                        },
+                        "description": "Solicita una cotización a un proveedor específico antes de confirmar el envío."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Create Shipment",
+                    "request": {
+                        "auth": {
+                            "type": "apikey",
+                            "apikey": [
+                                {
+                                    "key": "in",
+                                    "value": "header",
+                                    "type": "string"
+                                },
+                                {
+                                    "key": "key",
+                                    "value": "X-API-Key",
+                                    "type": "string"
+                                },
+                                {
+                                    "key": "value",
+                                    "value": "{{api_token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"reference_id\": \"ORDER-12345\",\n  \"provider\": \"TEST\",\n  \"scheduled_at\": \"2023-12-01T14:00:00Z\",\n  \"origin_location\": {\n    \"address\": \"Panama 925\",\n    \"city\": \"CABA\",\n    \"contact_name\": \"Sender Name\",\n    \"contact_phone\": \"1160913037\"\n  },\n  \"destination_location\": {\n    \"address\": \"Jose Bonifacio 3741\",\n    \"city\": \"CABA\",\n    \"contact_name\": \"Receiver Name\",\n    \"contact_phone\": \"1122334455\"\n  },\n  \"packages\": [\n    {\n      \"weight\": 1.5,\n      \"volume\": 0.05,\n      \"description\": \"Caja pequeña\",\n      \"value\": \"1000.00\"\n    }\n  ]\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/shipments/",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "shipments",
+                                ""
+                            ]
+                        },
+                        "description": "Crea un envío. Si el campo 'provider' no se envía, se usará la estrategia por defecto del comercio (Tenant)."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get Shipment Tracking",
+                    "request": {
+                        "auth": {
+                            "type": "apikey",
+                            "apikey": [
+                                {
+                                    "key": "in",
+                                    "value": "header",
+                                    "type": "string"
+                                },
+                                {
+                                    "key": "key",
+                                    "value": "X-API-Key",
+                                    "type": "string"
+                                },
+                                {
+                                    "key": "value",
+                                    "value": "{{api_token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/shipments/:id/tracking",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "shipments",
+                                ":id",
+                                "tracking"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "id",
+                                    "value": "uuid-here"
+                                }
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Cancel Shipment",
+                    "request": {
+                        "auth": {
+                            "type": "apikey",
+                            "apikey": [
+                                {
+                                    "key": "in",
+                                    "value": "header",
+                                    "type": "string"
+                                },
+                                {
+                                    "key": "key",
+                                    "value": "X-API-Key",
+                                    "type": "string"
+                                },
+                                {
+                                    "key": "value",
+                                    "value": "{{api_token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/shipments/:id/cancel",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "shipments",
+                                ":id",
+                                "cancel"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "id",
+                                    "value": "uuid-here"
+                                }
+                            ]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Couriers",
+            "item": [
+                {
+                    "name": "List Couriers",
+                    "request": {
+                        "auth": {
+                            "type": "apikey",
+                            "apikey": [
+                                {
+                                    "key": "in",
+                                    "value": "header",
+                                    "type": "string"
+                                },
+                                {
+                                    "key": "key",
+                                    "value": "X-API-Key",
+                                    "type": "string"
+                                },
+                                {
+                                    "key": "value",
+                                    "value": "{{api_token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/couriers/",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "couriers",
+                                ""
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Update Courier Status",
+                    "request": {
+                        "auth": {
+                            "type": "apikey",
+                            "apikey": [
+                                {
+                                    "key": "in",
+                                    "value": "header",
+                                    "type": "string"
+                                },
+                                {
+                                    "key": "key",
+                                    "value": "X-API-Key",
+                                    "type": "string"
+                                },
+                                {
+                                    "key": "value",
+                                    "value": "{{api_token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "PATCH",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"status\": \"ACTIVE\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/couriers/:id/status",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "couriers",
+                                ":id",
+                                "status"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "id",
+                                    "value": "uuid-here"
+                                }
+                            ]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Tracking",
+            "item": [
+                {
+                    "name": "Register Tracking Event",
+                    "request": {
+                        "auth": {
+                            "type": "apikey",
+                            "apikey": [
+                                {
+                                    "key": "in",
+                                    "value": "header",
+                                    "type": "string"
+                                },
+                                {
+                                    "key": "key",
+                                    "value": "X-API-Key",
+                                    "type": "string"
+                                },
+                                {
+                                    "key": "value",
+                                    "value": "{{api_token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"shipment_id\": \"uuid-here\",\n  \"event_type\": \"IN_TRANSIT\",\n  \"notes\": \"Courier recogió el paquete\",\n  \"location\": \"-34.6034,-58.4311\",\n  \"source\": \"COURIER_APP\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/tracking/events",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "tracking",
+                                "events"
+                            ]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Routing",
+            "item": [
+                {
+                    "name": "Create Route",
+                    "request": {
+                        "auth": {
+                            "type": "apikey",
+                            "apikey": [
+                                {
+                                    "key": "in",
+                                    "value": "header",
+                                    "type": "string"
+                                },
+                                {
+                                    "key": "key",
+                                    "value": "X-API-Key",
+                                    "type": "string"
+                                },
+                                {
+                                    "key": "value",
+                                    "value": "{{api_token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"courier_id\": \"uuid-here\",\n  \"vehicle_id\": \"uuid-here\",\n  \"date\": \"2023-12-01\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/routing/routes",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "routing",
+                                "routes"
+                            ]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        }
+    ],
+    "variable": [
+        {
+            "key": "baseUrl",
+            "value": "http://localhost:8000/api/v1",
+            "type": "string"
+        },
+        {
+            "key": "api_token",
+            "value": "your_secure_api_token_here",
+            "type": "string"
+        }
+    ]
+}

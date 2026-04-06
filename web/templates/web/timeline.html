@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seguimiento de Envíos | LogisticsCore</title>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Premium HSL Color Palette */
+            --bg-color: hsl(220, 33%, 98%);
+            --surface-color: hsl(0, 0%, 100%);
+            --text-primary: hsl(222, 47%, 11%);
+            --text-secondary: hsl(215, 16%, 47%);
+            --accent-color: hsl(230, 84%, 54%);
+            --accent-hover: hsl(230, 84%, 48%);
+            --error-color: hsl(348, 83%, 47%);
+            --success-color: hsl(152, 69%, 31%);
+            
+            /* Glassmorphism settings */
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.5);
+            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
+            --shadow-glass: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(at 0% 0%, hsla(253,16%,7%,0.04) 0, transparent 50%), 
+                radial-gradient(at 50% 0%, hsla(225,39%,30%,0.03) 0, transparent 50%), 
+                radial-gradient(at 100% 0%, hsla(339,49%,30%,0.04) 0, transparent 50%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 4rem 1rem;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 650px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 2.25rem;
+            font-weight: 700;
+            letter-spacing: -0.025em;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        /* Glassmorphism Form */
+        .search-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--shadow-glass);
+            margin-bottom: 2rem;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .search-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .search-form {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 1rem 1.25rem;
+            border-radius: 12px;
+            border: 1px solid hsl(214, 32%, 91%);
+            background: var(--surface-color);
+            font-size: 1rem;
+            color: var(--text-primary);
+            outline: none;
+            transition: all 0.2s ease;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .search-input:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 4px hsla(230, 84%, 54%, 0.1);
+        }
+
+        .search-input::placeholder {
+            color: hsl(215, 16%, 65%);
+        }
+
+        .btn-primary {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 0 1.5rem;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 6px hsla(230, 84%, 54%, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--accent-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 12px hsla(230, 84%, 54%, 0.3);
+        }
+
+        .btn-primary:active {
+            transform: translateY(1px);
+        }
+
+        /* Error Message */
+        .error-message {
+            background-color: hsla(348, 83%, 47%, 0.1);
+            color: var(--error-color);
+            padding: 1rem 1.25rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        /* Shipment Details Card */
+        .shipment-details {
+            background: var(--surface-color);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--shadow-md);
+            margin-bottom: 2rem;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .detail-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid hsl(214, 32%, 91%);
+        }
+
+        .detail-title {
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .detail-value {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .status-badge {
+            background-color: hsla(230, 84%, 54%, 0.1);
+            color: var(--accent-color);
+            padding: 0.35rem 0.75rem;
+            border-radius: 999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+        
+        .status-badge.delivered {
+            background-color: hsla(152, 69%, 31%, 0.1);
+            color: var(--success-color);
+        }
+
+        /* Vertical Timeline Premium */
+        .timeline {
+            position: relative;
+            padding-left: 2.5rem;
+            margin-top: 1rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0.75rem;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: hsl(214, 32%, 91%);
+            border-radius: 2px;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: 2rem;
+        }
+
+        .timeline-item:last-child {
+            padding-bottom: 0;
+        }
+        
+        .timeline-item:last-child::before {
+            display: none; /* Hide line below last item conceptually by just stopping it */
+        }
+
+        /* Connector Line highlighting completed steps */
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            left: -1.75rem;
+            top: 0.3rem;
+            width: 1rem;
+            height: 1rem;
+            border-radius: 50%;
+            background: var(--surface-color);
+            border: 2px solid var(--accent-color);
+            box-shadow: 0 0 0 4px var(--surface-color);
+            transition: all 0.3s ease;
+            z-index: 2;
+        }
+
+        /* Make the very first (most recent) event pulse */
+        .timeline-item:first-child::after {
+            background: var(--accent-color);
+            box-shadow: 0 0 0 4px hsla(230, 84%, 54%, 0.2);
+            animation: pulse 2s infinite;
+        }
+
+        .timeline-content {
+            background: var(--bg-color);
+            padding: 1.25rem;
+            border-radius: 12px;
+            border: 1px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .timeline-item:hover .timeline-content {
+            background: var(--surface-color);
+            border-color: hsl(214, 32%, 91%);
+            box-shadow: var(--shadow-sm);
+            transform: translateX(4px);
+        }
+
+        .timeline-date {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.25rem;
+            font-weight: 500;
+        }
+
+        .timeline-status {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .timeline-notes {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+        
+        .timeline-location {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            margin-top: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            background: hsl(214, 32%, 96%);
+            padding: 0.25rem 0.6rem;
+            border-radius: 6px;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 hsla(230, 84%, 54%, 0.4); }
+            70% { box-shadow: 0 0 0 10px hsla(230, 84%, 54%, 0); }
+            100% { box-shadow: 0 0 0 0 hsla(230, 84%, 54%, 0); }
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 0;
+            color: var(--text-secondary);
+        }
+        
+        .empty-state svg {
+            width: 64px;
+            height: 64px;
+            color: hsl(214, 32%, 85%);
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 600px) {
+            .search-form {
+                flex-direction: column;
+            }
+            .btn-primary {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <div class="header">
+            <h1>Rastreá tu Envío</h1>
+            <p>Ingresá tu código de seguimiento para conocer el estado actual</p>
+        </div>
+
+        <div class="search-card">
+            <form method="GET" action="/" class="search-form">
+                <input 
+                    type="text" 
+                    name="tracking_id" 
+                    class="search-input" 
+                    placeholder="Ejemplo: AR-12345678" 
+                    value="{{ search_id }}"
+                    required
+                    autocomplete="off"
+                >
+                <button type="submit" class="btn-primary">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    Buscar
+                </button>
+            </form>
+        </div>
+
+        {% if error_message %}
+            <div class="error-message">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                </svg>
+                {{ error_message }}
+            </div>
+        {% endif %}
+
+        {% if shipment %}
+            <div class="shipment-details">
+                <div class="detail-header">
+                    <div>
+                        <div class="detail-title">Orden</div>
+                        <div class="detail-value">{{ shipment.reference_id }}</div>
+                    </div>
+                    <div>
+                        <span class="status-badge {% if shipment.status == 'DELIVERED' %}delivered{% endif %}">
+                            {{ shipment.status }}
+                        </span>
+                    </div>
+                </div>
+
+                {% if history %}
+                    <div class="timeline">
+                        {% for event in history %}
+                        <div class="timeline-item">
+                            <div class="timeline-content">
+                                <div class="timeline-date">{{ event.timestamp|date:"d M Y, H:i" }}</div>
+                                <div class="timeline-status">{{ event.event_type }}</div>
+                                {% if event.notes %}
+                                    <div class="timeline-notes">{{ event.notes }}</div>
+                                {% endif %}
+                                {% if event.location %}
+                                    <div class="timeline-location">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                            <circle cx="12" cy="10" r="3"></circle>
+                                        </svg>
+                                        {{ event.location.city }}{% if event.location.address %}, {{ event.location.address }}{% endif %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="empty-state">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                        <p>Aún no hay eventos registrados para este envío.</p>
+                        <p style="font-size: 0.9rem; margin-top: 0.5rem; opacity: 0.7;">El courier no ha emitido actualizaciones en tiempo real.</p>
+                    </div>
+                {% endif %}
+            </div>
+        {% endif %}
+
+    </div>
+
+</body>
+</html>
