@@ -106,7 +106,7 @@ DATABASES = {}
 
 DATABASES["default"] = dj_database_url.config(
     default=config(
-        "DATABASE_URL_CONNECTION", default="postgres://Argon:admin@localhost:5433/LogisticsCore"
+        "DATABASE_URL_CONNECTION", default="postgres://postgres:postgres@localhost:5432/LogisticsCore"
     ),
     conn_max_age=600,
     conn_health_checks=True,
@@ -193,7 +193,7 @@ else:
 
 # Configuración del Panel de Control (Django Unfold)
 UNFOLD = {
-    "SITE_TITLE": "Quinoto Logistics",
+    "SITE_TITLE": "OpenDelivery",
     "SITE_HEADER": "Logistics Console",
     "SITE_URL": "/",
     
