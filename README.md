@@ -1,7 +1,11 @@
-# LogisticsCore
+# LogisticsCore - Opendelivery system
 
 > [!NOTE]
 > **LogisticsCore** was originally developed as a core component of a private production delivery system. It has been open-sourced to provide a robust, modular foundation for anyone building logistics and delivery platforms.
+
+> [!TIP]
+> **LogisticsCore** was developed following a **Specification-Driven Development (SDD)** approach using [QuinotoSpec](https://github.com/Quinoto-Tech/QuinotoSpec).  
+> You should definitely try it! QuinotoSpec makes it easier to define clear specifications and accelerate the building of robust systems.
 
 [![Django](https://img.shields.io/badge/Django-5.2-092E20?logo=django&logoColor=white)](https://www.djangoproject.com/)
 [![Django Ninja](https://img.shields.io/badge/Django%20Ninja-1.6.0-009688?logo=python&logoColor=white)](https://django-ninja.rest-framework.com/)
@@ -16,6 +20,9 @@
 - [Español (Spanish)](i18n/spanish/README.md)
 
 ---
+
+<img width="1388" height="716" alt="image" src="https://github.com/user-attachments/assets/18970ed7-b670-43fe-97bb-b35f9c2314da" />
+
 
 ## ✨ Key Features
 
