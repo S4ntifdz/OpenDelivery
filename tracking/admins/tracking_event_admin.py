@@ -1,11 +1,10 @@
 from django.contrib import admin
-from unfold.admin import ModelAdmin
-
+from core.admin import MultiTenantModelAdmin
 from tracking.models import TrackingEventModel
 
 
 @admin.register(TrackingEventModel)
-class TrackingEventAdmin(ModelAdmin):
+class TrackingEventAdmin(MultiTenantModelAdmin):
     list_display = ("uuid", "shipment", "event_type", "timestamp", "source")
     search_fields = ("notes", "source")
     list_filter = ("event_type", "source")

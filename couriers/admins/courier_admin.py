@@ -1,11 +1,10 @@
 from django.contrib import admin
-from unfold.admin import ModelAdmin
-
+from core.admin import MultiTenantModelAdmin
 from couriers.models import CourierModel
 
 
 @admin.register(CourierModel)
-class CourierAdmin(ModelAdmin):
+class CourierAdmin(MultiTenantModelAdmin):
     list_display = ("uuid", "name", "phone", "status", "vehicle")
     search_fields = ("name", "phone")
     list_filter = ("status",)

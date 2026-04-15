@@ -19,6 +19,13 @@ class CourierModel(BaseModel):
         blank=True,
         related_name="courier",
     )
+    tenant = models.ForeignKey(
+        "tenants.TenantModel",
+        on_delete=models.CASCADE,
+        related_name="couriers",
+        null=True,
+        blank=True,
+    )
 
     class Meta:
         db_table = "couriers_courier"

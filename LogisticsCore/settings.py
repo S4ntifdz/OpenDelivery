@@ -84,13 +84,14 @@ ROOT_URLCONF = "LogisticsCore.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "LogisticsCore.dashboard.dashboard_context",
             ],
         },
     },
@@ -250,6 +251,15 @@ UNFOLD = {
                         "link": reverse_lazy("admin:tenants_tenantmodel_changelist"),
                     },
                 ],
+            },
+        ],
+    },
+    "DASHBOARD": {
+        "navigation": [
+            {
+                "title": _("Dashboard"),
+                "link": reverse_lazy("admin:index"),
+                "icon": "dashboard",
             },
         ],
     },

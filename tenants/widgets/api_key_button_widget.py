@@ -6,7 +6,7 @@ class RegenerableInputWidget(UnfoldAdminTextInputWidget):
     Widget que hereda de Unfold para mantener el estilo (Dark mode, bordes, etc.)
     y añade un botón de autogeneración al final.
     """
-    def __init__(self, prefix="key_", button_text="✨ Autogenerar", *args, **kwargs):
+    def __init__(self, prefix="key_", button_text="✨ Autogenerate", *args, **kwargs):
         self.prefix = prefix
         self.button_text = button_text
         super().__init__(*args, **kwargs)

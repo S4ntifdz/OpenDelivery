@@ -72,7 +72,7 @@ class ShipmentModel(BaseModel):
         ordering = ["-created_at"]
 
     def save(self, *args, **kwargs):
-        """Sobreescribir save para autogenerar la URL de tracking si no existe."""
+        """Sobreescribir save para Autogenerate la URL de tracking si no existe."""
         # Se verifica si tracking_url está vacía (usualmente al crear el objeto la primera vez o si falló)
         if not self.tracking_url:
             # En este punto auto-creamos el id para usarlo (garantizamos UUID si aún no lo tiene pre save)

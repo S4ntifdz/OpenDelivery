@@ -1,0 +1,148 @@
+{% extends "admin/base.html" %}
+{% load i18n unfold %}
+
+{% block breadcrumbs %}{% endblock %}
+
+{% block content %}
+    <div class="px-4 py-8 md:px-12 bg-gray-50 dark:bg-gray-900 min-h-screen">
+        <h2 class="text-3xl font-extrabold mb-8 text-gray-900 dark:text-white border-b pb-4">
+            {% trans "Logistics Dashboard" %}
+        </h2>
+
+        <!-- KPIs Section -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
+            {% component "unfold/components/card.html" %}
+                <div class="p-4">
+                    <p class="text-sm font-medium text-gray-500 uppercase tracking-wider">{% trans "Total Shipments" %}</p>
+                    <div class="flex items-center justify-between mt-2">
+                        <p class="text-4xl font-black">{{ kpi_total }}</p>
+                        <span class="material-symbols-outlined text-primary-600 bg-primary-50 p-2 rounded-lg text-2xl">local_shipping</span>
+                    </div>
+                </div>
+            {% endcomponent %}
+
+            {% component "unfold/components/card.html" %}
+                <div class="p-4">
+                    <p class="text-sm font-medium text-gray-500 uppercase tracking-wider">{% trans "Delivered" %}</p>
+                    <div class="flex items-center justify-between mt-2">
+                        <p class="text-4xl font-black text-green-600">{{ kpi_delivered }}</p>
+                        <span class="material-symbols-outlined text-green-600 bg-green-50 p-2 rounded-lg text-2xl">check_circle</span>
+                    </div>
+                </div>
+            {% endcomponent %}
+
+            {% component "unfold/components/card.html" %}
+                <div class="p-4">
+                    <p class="text-sm font-medium text-gray-500 uppercase tracking-wider">{% trans "In Transit" %}</p>
+                    <div class="flex items-center justify-between mt-2">
+                        <p class="text-4xl font-black text-blue-600">{{ kpi_in_transit }}</p>
+                        <span class="material-symbols-outlined text-blue-600 bg-blue-50 p-2 rounded-lg text-2xl">speed</span>
+                    </div>
+                </div>
+            {% endcomponent %}
+
+            {% component "unfold/components/card.html" %}
+                <div class="p-4">
+                    <p class="text-sm font-medium text-gray-500 uppercase tracking-wider">{% trans "Failed / Cancelled" %}</p>
+                    <div class="flex items-center justify-between mt-2">
+                        <p class="text-4xl font-black text-red-600">{{ kpi_failed }}</p>
+                        <span class="material-symbols-outlined text-red-600 bg-red-50 p-2 rounded-lg text-2xl">error</span>
+                    </div>
+                </div>
+            {% endcomponent %}
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 mb-12">
+            <!-- Status Distribution -->
+            {% component "unfold/components/card.html" with title=_("Shipment Distribution by Status") %}
+                <div class="p-4" style="height: 320px; position: relative;">
+                    <canvas id="statusChart"></canvas>
+                </div>
+            {% endcomponent %}
+
+            <!-- Tenant Distribution -->
+            {% if tenant_chart %}
+                {% component "unfold/components/card.html" with title=_("Shipments per Merchant (Tenant)") %}
+                    <div class="p-4" style="height: 320px; position: relative;">
+                        <canvas id="tenantChart"></canvas>
+                    </div>
+                {% endcomponent %}
+            {% endif %}
+        </div>
+
+        <!-- Default App List Section -->
+        <div class="mt-12 border-t border-gray-200 dark:border-gray-800 pt-10">
+            <h3 class="text-xl font-bold mb-6 text-gray-800 dark:text-white">{% trans "System Administration" %}</h3>
+            <div class="flex flex-col lg:flex-row lg:gap-8">
+                <div class="flex-grow">
+                    {% include "unfold/helpers/app_list_default.html" %}
+                </div>
+                {% include "unfold/helpers/history.html" %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Initialization Script -->
+    <script>
+        window.addEventListener('load', function() {
+            if (typeof Chart === 'undefined') {
+                console.error('Chart.js is not loaded');
+                return;
+            }
+
+            const isDark = document.documentElement.classList.contains('dark');
+            const fontColor = isDark ? '#f9fafb' : '#374151';
+            const gridColor = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)';
+
+            // Status Chart
+            const ctxStatus = document.getElementById('statusChart');
+            if (ctxStatus) {
+                const statusData = {{ status_chart|safe }};
+                new Chart(ctxStatus, {
+                    type: 'doughnut',
+                    data: statusData,
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        cutout: '65%',
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: { color: fontColor, padding: 20, font: { size: 12 } }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Tenant Chart
+            const ctxTenant = document.getElementById('tenantChart');
+            if (ctxTenant) {
+                const tenantData = {{ tenant_chart|safe }};
+                new Chart(ctxTenant, {
+                    type: 'bar',
+                    data: tenantData,
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: { beginAtZero: true, ticks: { color: fontColor }, grid: { color: gridColor } },
+                            x: { ticks: { color: fontColor }, grid: { display: false } }
+                        },
+                        plugins: {
+                            legend: { display: false }
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+{% endblock %}
+
+{% block extrahead %}
+    {{ block.super }}
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <style>
+        .material-symbols-outlined { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    </style>
+{% endblock %}
