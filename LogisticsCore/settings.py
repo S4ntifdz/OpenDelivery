@@ -149,6 +149,10 @@ USE_I18N = True
 
 USE_TZ = True
 
+USE_I18N = True
+
+USE_TZ = True
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
@@ -203,45 +207,45 @@ UNFOLD = {
         "show_all_applications": False,
         "navigation": [
             {
-                "title": "Logística Core",
+                "title": _("Logistics Core"),
                 "separator": True, 
                 "items": [
-                    {"title": "Envíos", "link": "/admin/shipments/shipmentmodel/", "icon": "local_shipping"},
-                    {"title": "Locaciones", "link": "/admin/shipments/locationmodel/", "icon": "location_on"},
-                    {"title": "Paquetes", "link": "/admin/shipments/packagemodel/", "icon": "inventory_2"},
-                    {"title": "Cotizaciones", "link": "/admin/shipments/shipmentquotemodel/", "icon": "request_quote"},
+                    {"title": _("Shipments"), "link": "/admin/shipments/shipmentmodel/", "icon": "local_shipping"},
+                    {"title": _("Locations"), "link": "/admin/shipments/locationmodel/", "icon": "location_on"},
+                    {"title": _("Packages"), "link": "/admin/shipments/packagemodel/", "icon": "inventory_2"},
+                    {"title": _("Quotes"), "link": "/admin/shipments/shipmentquotemodel/", "icon": "request_quote"},
                 ],
             },
             {
-                "title": "Gestión de Flota",
+                "title": _("Fleet Management"),
                 "separator": True,
                 "items": [
-                    {"title": "Couriers", "link": "/admin/couriers/couriermodel/", "icon": "sports_motorsports"},
-                    {"title": "Vehículos", "link": "/admin/couriers/vehiclemodel/", "icon": "two_wheeler"},
+                    {"title": _("Couriers"), "link": "/admin/couriers/couriermodel/", "icon": "sports_motorsports"},
+                    {"title": _("Vehicles"), "link": "/admin/couriers/vehiclemodel/", "icon": "two_wheeler"},
                 ],
             },
             {
-                "title": "Rutas & Dispatching",
+                "title": _("Routes & Dispatching"),
                 "separator": True,
                 "items": [
-                    {"title": "Rutas", "link": "/admin/routing/routemodel/", "icon": "route"},
-                    {"title": "Paradas", "link": "/admin/routing/stopmodel/", "icon": "pin_drop"},
-                    {"title": "Tareas", "link": "/admin/routing/taskmodel/", "icon": "format_list_bulleted"},
+                    {"title": _("Routes"), "link": "/admin/routing/routemodel/", "icon": "route"},
+                    {"title": _("Stops"), "link": "/admin/routing/stopmodel/", "icon": "pin_drop"},
+                    {"title": _("Tasks"), "link": "/admin/routing/taskmodel/", "icon": "format_list_bulleted"},
                 ],
             },
             {
-                "title": "Trazabilidad",
+                "title": _("Tracking"),
                 "separator": True,
                 "items": [
-                    {"title": "Eventos de Seguimiento", "link": "/admin/tracking/trackingeventmodel/", "icon": "timeline"},
+                    {"title": _("Tracking Events"), "link": "/admin/tracking/trackingeventmodel/", "icon": "timeline"},
                 ],
             },
             {
-                "title": _("Administración"),
+                "title": _("Administration"),
                 "icon": "settings",
                 "items": [
                     {
-                        "title": _("Comercios (Tenants)"),
+                        "title": _("Merchants (Tenants)"),
                         "icon": "store",
                         "link": reverse_lazy("admin:tenants_tenantmodel_changelist"),
                     },

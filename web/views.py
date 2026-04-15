@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.core.exceptions import ValidationError
+from django.utils.translation import gettext as _
 
 from shipments.repositories.shipment_repository import ShipmentRepository
 from tracking.services.tracking_service import TrackingService
@@ -24,13 +25,13 @@ def tracking_timeline_view(request):
         try:
             shipment = ShipmentRepository.get_by_external_id(search_id)
             if not shipment:
-                context["error_message"] = "No encontramos un envío con ese ID de rastreo."
+                context["error_message"] = "We couldn't find a shipment with that tracking ID."
             else:
                 context["shipment"] = shipment
                 # 2. Extraer el timeline cronológico
                 context["history"] = TrackingService.get_shipment_history(str(shipment.uuid))
         except Exception as e:
             # Captura de errores base de datos (p. ej IDs malformados)
-            context["error_message"] = "El ID ingresado no es válido o hubo un error local en la búsqueda."
+            context["error_message"] = "The entered ID is not valid or there was a local error in the search."
 
     return render(request, "web/timeline.html", context)

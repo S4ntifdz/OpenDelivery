@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Seguimiento de Envíos | LogisticsCore</title>
+    <title>Shipment Tracking | LogisticsCore</title>
     <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -58,6 +58,7 @@
         .header {
             text-align: center;
             margin-bottom: 3rem;
+            position: relative;
         }
 
         .header h1 {
@@ -351,8 +352,8 @@
     <div class="container">
         
         <div class="header">
-            <h1>Rastreá tu Envío</h1>
-            <p>Ingresá tu código de seguimiento para conocer el estado actual</p>
+            <h1>Track your Shipment</h1>
+            <p>Enter your tracking code to see the current status</p>
         </div>
 
         <div class="search-card">
@@ -361,7 +362,7 @@
                     type="text" 
                     name="tracking_id" 
                     class="search-input" 
-                    placeholder="Ejemplo: AR-12345678" 
+                    placeholder="Example: AR-12345678" 
                     value="{{ search_id }}"
                     required
                     autocomplete="off"
@@ -371,7 +372,7 @@
                         <circle cx="11" cy="11" r="8"></circle>
                         <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                     </svg>
-                    Buscar
+                    Search
                 </button>
             </form>
         </div>
@@ -391,7 +392,7 @@
             <div class="shipment-details">
                 <div class="detail-header">
                     <div>
-                        <div class="detail-title">Orden</div>
+                        <div class="detail-title">Order</div>
                         <div class="detail-value">{{ shipment.reference_id }}</div>
                     </div>
                     <div>
@@ -430,8 +431,8 @@
                             <circle cx="12" cy="12" r="10"></circle>
                             <polyline points="12 6 12 12 16 14"></polyline>
                         </svg>
-                        <p>Aún no hay eventos registrados para este envío.</p>
-                        <p style="font-size: 0.9rem; margin-top: 0.5rem; opacity: 0.7;">El courier no ha emitido actualizaciones en tiempo real.</p>
+                        <p>No events registered for this shipment yet.</p>
+                        <p style="font-size: 0.9rem; margin-top: 0.5rem; opacity: 0.7;">The courier has not issued real-time updates.</p>
                     </div>
                 {% endif %}
             </div>
