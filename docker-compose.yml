@@ -3,7 +3,7 @@ services:
     image: postgres:16-alpine
     restart: unless-stopped
     ports:
-      - "5433:5432" 
+      - "5432:5432" 
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -15,7 +15,7 @@ services:
     image: redis:7-alpine
     restart: unless-stopped
     ports:
-      - "6380:6379"
+      - "6379:6379"
 
 volumes:
   postgres_data:
